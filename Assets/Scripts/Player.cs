@@ -9,10 +9,11 @@ public class Player : MonoBehaviour
 	[SerializeField] private float acceleration;
 	[SerializeField] private float friction;
 	[SerializeField] private float jumpForce;
+	[SerializeField] private float coyoteTime;
 	[SerializeField] private Transform groundCheck;
 	[SerializeField] private float groundCheckRadius = 0.2f;
 	[SerializeField] private LayerMask groundLayer;
-	private bool isGrounded;
+	public bool isGrounded;
 	private Rigidbody2D rb;
 	private PlayerInput input;
 	private InputAction moveAction, jumpAction;
@@ -80,7 +81,7 @@ public class Player : MonoBehaviour
 
 	IEnumerator CoyoteTime()
 	{
-		yield return new WaitForSeconds(0.05f);
+		yield return new WaitForSeconds(coyoteTime);
 		if (!Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer)) isGrounded = false;
 	}
 
