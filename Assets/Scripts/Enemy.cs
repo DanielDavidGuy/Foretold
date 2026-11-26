@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
+	[SerializeField] private float health;
 	[SerializeField] private float friction;
 	[SerializeField] private float maxSpeed;
 	Rigidbody2D rb;
@@ -24,6 +25,8 @@ public class Enemy : MonoBehaviour
 		paralyzed = true;
 		rb.linearVelocity = Vector2.zero;
 		rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+		health--;
+		if (health <= 0) Die();
 		yield return new WaitForSeconds(0.4f);
 		paralyzed = false;
 		canTakeDamage = true;
@@ -32,7 +35,7 @@ public class Enemy : MonoBehaviour
 	void OnCollisionEnter2D(Collision2D collision)
 	{
 		Vector2 direction = (collision.transform.position - transform.position).normalized;
-		direction.y += 1.5f;
+		direction += new Vector2(0, 2f);
 		direction.Normalize();
 		Player player = collision.gameObject.GetComponent<Player>();
 		if (player != null) player.Hurt(0, direction, 10f);
@@ -55,5 +58,10 @@ public class Enemy : MonoBehaviour
 		Vector2 velocity = rb.linearVelocity;
 		velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
 		rb.linearVelocity = velocity;
+	}
+	
+	void Die()
+	{
+		Destroy(gameObject);
 	}
 }

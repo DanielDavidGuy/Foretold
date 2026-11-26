@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+	[SerializeField] private float health;
 	[SerializeField] private float maxSpeed;
 	[SerializeField] private float acceleration;
 	[SerializeField] private float friction;
@@ -96,6 +97,8 @@ public class Player : MonoBehaviour
 		paralyzed = true;
 		rb.linearVelocity = Vector2.zero;
 		rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+		health--;
+		if (health <= 0) Die();
 		yield return new WaitForSeconds(0.4f);
 		paralyzed = false;
 		yield return new WaitForSeconds(0.6f);
@@ -107,5 +110,10 @@ public class Player : MonoBehaviour
 		Vector2 velocity = rb.linearVelocity;
 		velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
 		rb.linearVelocity = velocity;
+	}
+
+	void Die()
+	{
+		Destroy(gameObject);
 	}
 }

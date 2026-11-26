@@ -10,6 +10,7 @@ public class SwordHitbox : MonoBehaviour
 	private InputAction moveAction, attackAction;
 	private bool canAttack;
 	private BoxCollider2D collider;
+	private SpriteRenderer spriteRenderer;
 	void Awake()
 	{
 		input = new PlayerInput();
@@ -17,7 +18,8 @@ public class SwordHitbox : MonoBehaviour
 		attackAction = input.Player.Attack;
 		initialLocalOffset = transform.localPosition;
 		collider = GetComponent<BoxCollider2D>();
-		collider.enabled = false;
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Toggle(false);
 		canAttack = true;
 	}
 
@@ -31,6 +33,12 @@ public class SwordHitbox : MonoBehaviour
 		input.Player.Disable();
 	}
 
+	void Toggle(bool on)
+	{
+		collider.enabled = on;
+		spriteRenderer.enabled = on;
+	}
+
 	void Update()
 	{
 		float facingDirection = moveAction.ReadValue<float>();
@@ -41,9 +49,9 @@ public class SwordHitbox : MonoBehaviour
 	protected IEnumerator Attack()
 	{
 		canAttack = false;
-		collider.enabled = true;
+		Toggle(true);
 		yield return new WaitForSeconds(0.5f);
-		collider.enabled = false;
+		Toggle(false);
 		yield return new WaitForSeconds(0.25f);
 		canAttack = true;
 	}
