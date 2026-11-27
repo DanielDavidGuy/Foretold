@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, Hurtable
 {
-	[SerializeField] private float health;
-	[SerializeField] private float maxSpeed;
-	[SerializeField] private float acceleration;
-	[SerializeField] private float friction;
-	[SerializeField] private float jumpForce;
-	[SerializeField] private float coyoteTime;
+	public int health {get; set;}
+	[SerializeField] private int startingHealth;
+	[SerializeField] private float maxSpeed, acceleration, friction, jumpForce, coyoteTime;
+	[SerializeField] private float paralysisTime, invincibilityTime;
 	[SerializeField] private Transform groundCheck;
 	[SerializeField] private float groundCheckRadius = 0.2f;
 	[SerializeField] private LayerMask groundLayer;
 	public bool isGrounded;
-	private Rigidbody2D rb;
+	public bool canTakeDamage {get; set;}
+	public bool paralyzed {get; set;}
+	public Rigidbody2D rb {get; set;}
 	private PlayerInput input;
 	private InputAction moveAction, jumpAction;
-	private bool canTakeDamage, paralyzed, jumpRequested;
+	private bool jumpRequested;
 	public List<Vector2> additionalMovementVectors;
 
 	void Awake()
@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
 		jumpAction = input.Player.Jump;
 		paralyzed = false;
 		canTakeDamage = true;
+		health = startingHealth;
 		rb = GetComponent<Rigidbody2D>();
 	}
 
@@ -86,22 +87,16 @@ public class Player : MonoBehaviour
 		if (!Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer)) isGrounded = false;
 	}
 
-	public void Hurt(int damage, Vector2 knockbackDirection, float knockbackForce)
+	public void RunCoroutineAfterDamage()
 	{
-		if (canTakeDamage) StartCoroutine(TakeDamage(damage, knockbackDirection, knockbackForce));
+		StartCoroutine(ResetAfterDamage());
 	}
 
-	IEnumerator TakeDamage(int damage, Vector2 knockbackDirection, float knockbackForce)
+	IEnumerator ResetAfterDamage()
 	{
-		canTakeDamage = false;
-		paralyzed = true;
-		rb.linearVelocity = Vector2.zero;
-		rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-		health--;
-		if (health <= 0) Die();
-		yield return new WaitForSeconds(0.4f);
+		yield return new WaitForSeconds(paralysisTime);
 		paralyzed = false;
-		yield return new WaitForSeconds(0.6f);
+		yield return new WaitForSeconds(invincibilityTime - paralysisTime);
 		canTakeDamage = true;
 	}
 
@@ -112,7 +107,7 @@ public class Player : MonoBehaviour
 		rb.linearVelocity = velocity;
 	}
 
-	void Die()
+	public void Die()
 	{
 		Destroy(gameObject);
 	}

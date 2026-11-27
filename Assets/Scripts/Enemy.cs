@@ -1,44 +1,41 @@
 using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, Hurtable
 {
-	[SerializeField] private float health;
-	[SerializeField] private float friction;
-	[SerializeField] private float maxSpeed;
-	Rigidbody2D rb;
-	bool canTakeDamage = true;
-	bool paralyzed = false;
+	public int health {get; set;}
+	[SerializeField] private int startingHealth;
+	[SerializeField] private float friction, maxSpeed, knockbackForce;
+	[SerializeField] private Vector2 knockbackAngle;
+	[SerializeField] private float paralysisTime, invincibilityTime;
+	public bool canTakeDamage {get; set;}
+	public bool paralyzed {get; set;}
+	public Rigidbody2D rb {get; set;}
 
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
-	}
-	public void Hurt(int damage, Vector2 knockbackDirection, float knockbackForce)
-	{
-		if (canTakeDamage) StartCoroutine(TakeDamage(damage, knockbackDirection, knockbackForce));
+		canTakeDamage = true;
+		paralyzed = false;
+		health = startingHealth;
 	}
 
-	IEnumerator TakeDamage(int damage, Vector2 knockbackDirection, float knockbackForce)
+	public void RunCoroutineAfterDamage()
 	{
-		canTakeDamage = false;
-		paralyzed = true;
-		rb.linearVelocity = Vector2.zero;
-		rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-		health--;
-		if (health <= 0) Die();
-		yield return new WaitForSeconds(0.4f);
+		StartCoroutine(ResetAfterDamage());
+	}
+
+	IEnumerator ResetAfterDamage()
+	{
+		yield return new WaitForSeconds(paralysisTime);
 		paralyzed = false;
+		yield return new WaitForSeconds(invincibilityTime - paralysisTime);
 		canTakeDamage = true;
 	}
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		Vector2 direction = (collision.transform.position - transform.position).normalized;
-		direction += new Vector2(0, 2f);
-		direction.Normalize();
-		Player player = collision.gameObject.GetComponent<Player>();
-		if (player != null) player.Hurt(0, direction, 10f);
+		KnockbackHelper.tryToHurt<Player>(collision.gameObject, gameObject.transform, knockbackAngle, knockbackForce);
 	}
 
 	void CalculateMovement()
@@ -60,7 +57,7 @@ public class Enemy : MonoBehaviour
 		rb.linearVelocity = velocity;
 	}
 	
-	void Die()
+	public void Die()
 	{
 		Destroy(gameObject);
 	}
