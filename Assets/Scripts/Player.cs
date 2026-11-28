@@ -6,10 +6,10 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
 	[SerializeField] private float health;
-	[SerializeField] private float maxSpeed;
-	[SerializeField] private float acceleration;
+	[SerializeField] public float maxSpeed;
+	[SerializeField] public float acceleration;
 	[SerializeField] private float friction;
-	[SerializeField] private float jumpForce;
+	[SerializeField] public float jumpForce;
 	[SerializeField] private float coyoteTime;
 	[SerializeField] private Transform groundCheck;
 	[SerializeField] private float groundCheckRadius = 0.2f;
@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
 	private InputAction moveAction, jumpAction;
 	private bool canTakeDamage, paralyzed, jumpRequested;
 	public List<Vector2> additionalMovementVectors;
+
+	public Gems equippedGem; 
 
 	void Awake()
 	{
@@ -115,5 +117,19 @@ public class Player : MonoBehaviour
 	void Die()
 	{
 		Destroy(gameObject);
+	}
+
+	public void equipGem(Gems newGem)
+	{
+		if (equippedGem != null)
+		{
+			equippedGem.DropGem();
+		}
+
+		equippedGem = newGem;
+
+		newGem.ApplyEffects(this);
+
+		newGem.gameObject.SetActive(false);
 	}
 }
