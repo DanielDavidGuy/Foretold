@@ -21,6 +21,8 @@ public class Player : MonoBehaviour, Hurtable
 	private bool jumpRequested;
 	public List<Vector2> additionalMovementVectors;
 
+	public Gems equippedGem; 
+
 	void Awake()
 	{
 		input = new PlayerInput();
@@ -110,5 +112,19 @@ public class Player : MonoBehaviour, Hurtable
 	public void Die()
 	{
 		Destroy(gameObject);
+	}
+
+	public void equipGem(Gems newGem)
+	{
+		if (equippedGem != null)
+		{
+			equippedGem.DropGem();
+		}
+
+		equippedGem = newGem;
+
+		newGem.ApplyEffects(this);
+
+		newGem.gameObject.SetActive(false);
 	}
 }
