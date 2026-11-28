@@ -54,7 +54,7 @@ public class SwordHitbox : MonoBehaviour
 		Toggle(true);
 		yield return new WaitForSeconds(attackDuration);
 		Toggle(false);
-		yield return new WaitForSeconds(attackDuration - attackCooldown);
+		yield return new WaitForSeconds(attackCooldown - attackDuration);
 		canAttack = true;
 	}
 

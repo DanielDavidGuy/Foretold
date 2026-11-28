@@ -6,10 +6,8 @@ public abstract class Gem : MonoBehaviour
 {
     //variables 
 
-    public GameObject gem;
     public bool playerInRange;
     protected Player player;
-    public bool hasGem = false;
     protected PlayerInput input;
     protected InputAction collectAction;
     
@@ -40,13 +38,14 @@ public abstract class Gem : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<Player>(out Player player)) playerInRange = false;
+        if (collision.gameObject.TryGetComponent<Player>(out _)) playerInRange = false;
     }
 
     //calls player script of collecting gem
     void CollectGem()
     {
         player.equipGem(this);
+        gameObject.SetActive(false);
     }
 
     public void DropGem()

@@ -16,7 +16,6 @@ public class Enemy : MonoBehaviour, Hurtable
 	{
 		rb = GetComponent<Rigidbody2D>();
 		canTakeDamage = true;
-		paralyzed = false;
 		health = startingHealth;
 	}
 
