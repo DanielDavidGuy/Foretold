@@ -1002,6 +1002,7 @@ MonoBehaviour:
     m_Bits: 8
   isGrounded: 0
   additionalMovementVectors: []
+  equippedGem: {fileID: 0}
 --- !u!1 &819956194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1179,13 +1180,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 819956194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e3eeb243680df84ab7eec5c1807244d, type: 3}
+  m_Script: {fileID: 11500000, guid: cb9fb06bb79ec4ef6922b97b206ae0a5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gems
+  m_EditorClassIdentifier: Assembly-CSharp::YellowGem
   gem: {fileID: 0}
   playerInRange: 0
   hasGem: 0
-  gemType: 0
 --- !u!1 &865431346
 GameObject:
   m_ObjectHideFlags: 0
@@ -1917,7 +1917,7 @@ GameObject:
   - component: {fileID: 1727241922}
   - component: {fileID: 1727241921}
   - component: {fileID: 1727241920}
-  - component: {fileID: 1727241919}
+  - component: {fileID: 1727241924}
   m_Layer: 3
   m_Name: BlueGem
   m_TagString: Untagged
@@ -1925,22 +1925,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1727241919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727241918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e3eeb243680df84ab7eec5c1807244d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gems
-  gem: {fileID: 0}
-  playerInRange: 0
-  hasGem: 0
-  gemType: 1
 --- !u!61 &1727241920
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2089,6 +2073,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1727241924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727241918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4711b7c5f1e724b9f900ddc93028435d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlueGem
+  gem: {fileID: 0}
+  playerInRange: 0
+  hasGem: 0
 --- !u!1 &1826433542
 GameObject:
   m_ObjectHideFlags: 0
@@ -2257,6 +2256,6 @@ SceneRoots:
   - {fileID: 1171564537}
   - {fileID: 710868704}
   - {fileID: 1434686602}
-  - {fileID: 448828214}
   - {fileID: 819956198}
   - {fileID: 1727241923}
+  - {fileID: 435640166}

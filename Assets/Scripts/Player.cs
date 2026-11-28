@@ -7,7 +7,7 @@ public class Player : MonoBehaviour, Hurtable
 {
 	public int health {get; set;}
 	[SerializeField] private int startingHealth;
-	[SerializeField] private float maxSpeed, acceleration, friction, jumpForce, coyoteTime;
+	[SerializeField] public float maxSpeed, acceleration, friction, jumpForce, coyoteTime;
 	[SerializeField] private float paralysisTime, invincibilityTime;
 	[SerializeField] private Transform groundCheck;
 	[SerializeField] private float groundCheckRadius = 0.2f;
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour, Hurtable
 	private bool jumpRequested;
 	public List<Vector2> additionalMovementVectors;
 
-	public Gems equippedGem; 
+	public Gem equippedGem; 
 
 	void Awake()
 	{
@@ -114,7 +114,7 @@ public class Player : MonoBehaviour, Hurtable
 		Destroy(gameObject);
 	}
 
-	public void equipGem(Gems newGem)
+	public void equipGem(Gem newGem)
 	{
 		if (equippedGem != null)
 		{
