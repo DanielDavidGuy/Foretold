@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class SwordHitbox : MonoBehaviour
 {
+	[SerializeField] private float attackDuration, attackCooldown, knockbackForce;
+	[SerializeField] private Vector2 knockbackAngle;
 	private Vector2 initialLocalOffset;
 	private Vector2 localOffset;
 	private PlayerInput input;
@@ -50,18 +52,14 @@ public class SwordHitbox : MonoBehaviour
 	{
 		canAttack = false;
 		Toggle(true);
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(attackDuration);
 		Toggle(false);
-		yield return new WaitForSeconds(0.25f);
+		yield return new WaitForSeconds(attackDuration - attackCooldown);
 		canAttack = true;
 	}
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Vector2 direction = (collision.transform.position - transform.position).normalized;
-		direction.y += 1.5f;
-		direction.Normalize();
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-		if (enemy != null) enemy.Hurt(0, direction, 10f);
+		KnockbackHelper.tryToHurt<Enemy>(collision.gameObject, gameObject.transform, knockbackAngle, knockbackForce);
     }
 }
